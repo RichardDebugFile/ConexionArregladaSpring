@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greeting App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #6C5CE7;
+      --secondary-color: #A8A5E6;
+      --accent-color: #FF7675;
+      --background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      --text-color: #2d3436;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      font-family: 'Poppins', sans-serif;
+      background: var(--background);
+      color: var(--text-color);
+      animation: gradientAnimation 15s ease infinite;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, var(--secondary-color), transparent);
+      animation: borderRotate 6s linear infinite;
+      opacity: 0.1;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      font-weight: 600;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    input {
+      flex: 1;
+      padding: 15px 25px;
+      border: 2px solid var(--primary-color);
+      border-radius: 12px;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    input::placeholder {
+      color: #a8a5e6;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 15px rgba(108, 92, 231, 0.2);
+    }
+
+    button {
+      padding: 15px 30px;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+    }
+
+    button::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: rotate(45deg);
+      animation: buttonShine 3s infinite;
+    }
+
+    #displayContent {
+      margin-top: 2rem;
+      padding: 2rem;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      border-radius: 15px;
+      font-size: 1.6rem;
+      color: white;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+    }
+
+    #displayContent.show {
+      opacity: 1;
+      transform: scale(1);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .icon {
+      margin-right: 10px;
+    }
+
+    @keyframes borderRotate {
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes buttonShine {
+      100% { left: 150%; }
+    }
+
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+        border-radius: 15px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .input-group {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1><i class="fas fa-magic icon"></i>¡Hola! ¿Cómo te llamas?</h1>
+
+  <div class="input-group">
+    <input type="text" id="nameInput" placeholder="Escribe tu nombre aquí...">
+    <button onclick="getGreeting()">
+      <i class="fas fa-hand-sparkles"></i> Saludar
+    </button>
+  </div>
+
+  <div id="displayContent"></div>
+</div>
+
+<script>
+  async function getGreeting() {
+    const name = document.getElementById('nameInput').value;
+    const display = document.getElementById('displayContent');
+
+    if (!name) {
+      display.textContent = "Por favor, escribe tu nombre ✍️";
+      display.style.background = "linear-gradient(45deg, #ff7675, #fdcb6e)";
+      display.classList.add('show');
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/greeting?name=${encodeURIComponent(name)}`);
+      if (!response.ok) throw new Error('Error en la solicitud');
+
+      const data = await response.json();
+      display.textContent = `${getTimeEmoji()} ${data.content}`;
+      display.style.background = "linear-gradient(45deg, var(--primary-color), var(--accent-color))";
+      display.classList.add('show');
+    } catch (error) {
+      display.textContent = "¡Ups! Error al conectar con el servidor 🚨";
+      display.style.background = "linear-gradient(45deg, #ff7675, #e17055)";
+      display.classList.add('show');
+      console.error("Error:", error);
+    }
+  }
+
+  function getTimeEmoji() {
+    const hour = new Date().getHours();
+    if (hour < 12) return '🌞';
+    if (hour < 18) return '🌤️';
+    return '🌙';
+  }
+</script>
+</body>
+</html>
